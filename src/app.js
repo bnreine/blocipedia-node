@@ -5,7 +5,7 @@ const appConfig = require("./config/main-config.js");
 
 
 routeConfig.init(app);
-appConfig.init();
+appConfig.init(app, express);
 
 
 module.exports = app;
