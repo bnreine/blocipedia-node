@@ -8,11 +8,15 @@ var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config/config.json')[env];
 var db        = {};
 
+
+
 if (config.use_env_variable) {
   var sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+
 
 fs
   .readdirSync(__dirname)
@@ -20,9 +24,13 @@ fs
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
   })
   .forEach(file => {
-    var model = sequelize['import'](path.join(__dirname, file));
+    //console.log("before")
+    var model = sequelize['import'](path.join(__dirname, file));   //this isn't executing ---> could be the model itself then
+    //console.log("after")
     db[model.name] = model;
   });
+
+
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
@@ -30,7 +38,11 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+
 
 module.exports = db;
