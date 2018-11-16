@@ -1,3 +1,4 @@
+// #1
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../db/models").User;
@@ -10,26 +11,21 @@ module.exports = {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    console.log("passport config")  //prints successfully
-    passport.use(new LocalStrategy({   // problem here
+// #3
+    passport.use(new LocalStrategy({
       usernameField: "email"
     }, (email, password, done) => {
-      console.log("after passport use")
       User.findOne({
         where: { email }
       })
       .then((user) => {
-        console.log("after finding user")
+
 // #4
         if (!user || !authHelper.comparePass(password, user.password)) {
           return done(null, false, { message: "Invalid email or password" });
         }
 // #5
         return done(null, user);
-      })
-      .catch((err) => {
-        //console.log("errors here");
-        done();
       })
     }));
 
