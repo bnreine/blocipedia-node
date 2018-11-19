@@ -8,7 +8,7 @@ module.exports = {
       req.flash("notice", "You must be signed in to do that.")
       return res.redirect("/users/sign_in");
     } else {
-      console.log("ensure authentication successful")
+      //console.log("ensure authentication successful")
       next();
     }
   },

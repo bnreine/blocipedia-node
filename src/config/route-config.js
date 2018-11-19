@@ -7,10 +7,10 @@ module.exports = {
     //const commentRoutes = require("../routes/comments");
     //const voteRoutes = require("../routes/votes");
     //const favoriteRoutes = require("../routes/favorites");
-    //if(process.env.NODE_ENV === "test") {
-      //const mockAuth = require("../../spec/support/mock-auth.js");
-      //mockAuth.fakeIt(app);
-    //}
+    if(process.env.NODE_ENV === "test") {
+      const mockAuth = require("../../spec/support/mock-auth.js");
+      mockAuth.fakeIt(app);
+    }
     app.use(staticRoutes);
     //app.use(topicRoutes);
      //app.use(postRoutes);
