@@ -3,7 +3,7 @@ const passport = require("passport");
 
 module.exports = {
   signUp(req, res, next){
-    console.log("before render sign up")
+    //console.log("before render sign up")
     res.render("users/sign_up");
   },
   create(req, res, next){
@@ -24,5 +24,31 @@ module.exports = {
         })
       }
     });
+  },
+  signInForm(req, res, next){
+    res.render("users/sign_in");
+  },
+
+  signIn(req, res, next){
+    console.log("begin controller")
+    passport.authenticate("local")(req, res, function () {
+      if(!req.user){
+        console.log("error notice controller") //Doesn't spit anything out here with wrong password
+        req.flash("notice", "Sign in failed. Please try again.")
+        res.redirect("/users/sign_in");
+      } else {
+        req.flash("notice", "You've successfully signed in!");
+        res.redirect("/");
+      }
+    })
+  },
+
+
+  signOut(req, res, next){
+    req.logout();
+    req.flash("notice", "You've successfully signed out!");
+    res.redirect("/");
   }
+
+
 }

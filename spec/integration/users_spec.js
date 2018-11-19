@@ -3,6 +3,9 @@ const server = require("../../src/server");
 const base = "http://localhost:3000/users/";
 const User = require("../../src/db/models").User;
 const sequelize = require("../../src/db/models/index").sequelize;
+const bcrypt = require("bcryptjs");
+
+
 
 describe("routes: users", () => {
 
@@ -30,7 +33,7 @@ describe("routes: users", () => {
   describe("GET /users/sign_up", () => {
 
     it("should render a view with a sign up form", (done) => {
-      console.log("get sign up form")
+      //console.log("get sign up form")
       request.get(`${base}sign_up`, (err, res, body) => {
         expect(err).toBeNull();
         expect(body).toContain("Welcome to Blocipedia");
@@ -113,6 +116,87 @@ describe("routes: users", () => {
     });
 
   });
+
+
+
+  describe("GET /users/sign_in", () => {
+
+    it("should render a view with a sign in form", (done) => {
+      request.get(`${base}sign_in`, (err, res, body) => {
+        expect(err).toBeNull();
+        expect(body).toContain("Sign in");
+        done();
+      });
+    });
+
+  });
+
+
+
+
+  describe("POST /users/sign_in", () => {
+
+
+    beforeEach((done) => {
+      const salt = bcrypt.genSaltSync();
+      const userPassword = "123456";
+      const hashedPassword = bcrypt.hashSync(userPassword, salt);
+      User.create({
+        username: "member",
+        email: "member@gmail.com",
+        password: hashedPassword
+      })
+      .then((user) => {
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+        done();
+      })
+    })
+
+
+
+
+
+    it("should successfully sign in and redirect to / ", (done) => {
+      const options = {
+        url: `${base}sign_in`,
+        form: {
+          email: "member@gmail.com",
+          password: "123456"
+        }
+      }
+      request.post(options, (err, res, body) => {
+        expect(err).toBeNull();
+        expect(body).toContain("Redirecting to /");
+        done();
+      });
+    });
+
+
+
+it("should not sign in a user not in the database", (done) => {
+  const options = {
+    url: `${base}sign_in`,
+    form: {
+      email: "member1@gmail.com",
+      password: "123456"
+    }
+  }
+  request.post(options, (err, res, body) => {
+    expect(err).toBeNull();
+    expect(body).toContain("Unauthorized");
+    done();
+  });
+});
+
+
+
+
+
+  });
+
 
 
 
