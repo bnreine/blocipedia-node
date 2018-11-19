@@ -6,12 +6,6 @@ describe("routes : static", () => {
 
   describe("GET /", () => {
 
-    it("should do nothign", (done) => {
-      expect(1).toBe(1);
-      done();
-    })
-
-/*
     it("should return status code 200 and have 'Welcome to Blocipedia' in the body of the response", (done) => {
       console.log("before spec")
       request.get(base, (err, res, body) => {
@@ -20,7 +14,7 @@ describe("routes : static", () => {
         done();
       });
     });
-*/
+
 
 
   });

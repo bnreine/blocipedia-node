@@ -3,10 +3,12 @@ const passport = require("passport");
 
 module.exports = {
   signUp(req, res, next){
+    console.log("before render sign up")
     res.render("users/sign_up");
   },
   create(req, res, next){
     let newUser = {
+      username: req.body.username,
       email: req.body.email,
       password: req.body.password,
       passwordConfirmation: req.body.passwordConfirmation

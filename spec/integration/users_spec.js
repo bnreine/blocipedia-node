@@ -30,9 +30,10 @@ describe("routes: users", () => {
   describe("GET /users/sign_up", () => {
 
     it("should render a view with a sign up form", (done) => {
+      console.log("get sign up form")
       request.get(`${base}sign_up`, (err, res, body) => {
         expect(err).toBeNull();
-        expect(body).toContain("Sign up");
+        expect(body).toContain("Welcome to Blocipedia");
         done();
       });
     });
@@ -56,8 +57,10 @@ describe("routes: users", () => {
       const options = {
         url: base,
         form: {
-          email: "user@example.com",
-          password: "123456789"
+          username: "user1",
+          email: "user1@example.com",
+          password: "123456789",
+          passwordConfirmation: "123456789"
         }
       }
 
@@ -65,10 +68,10 @@ describe("routes: users", () => {
         (err, res, body) => {
 
 // #2
-          User.findOne({where: {email: "user@example.com"}})
+          User.findOne({where: {email: "user1@example.com"}})
           .then((user) => {
             expect(user).not.toBeNull();
-            expect(user.email).toBe("user@example.com");
+            expect(user.email).toBe("user1@example.com");
             expect(user.id).toBe(1);
             done();
           })
@@ -80,14 +83,19 @@ describe("routes: users", () => {
       );
     });
 
+
+
+
 // #3
     it("should not create a new user with invalid attributes and redirect", (done) => {
       request.post(
         {
           url: base,
           form: {
+            username: "user1",
             email: "no",
-            password: "123456789"
+            password: "123456789",
+            passwordConfirmation: "123456789"
           }
         },
         (err, res, body) => {
@@ -104,7 +112,12 @@ describe("routes: users", () => {
       );
     });
 
+
+
+
   });
+
+
 
 
 
