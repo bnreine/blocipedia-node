@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       };
       sgMail.send(msg);
     });
+    User.hasMany(models.Wiki, {
+      foreignKey: "userId",
+      as: "wikis"
+    });
   };
   return User;
 };
