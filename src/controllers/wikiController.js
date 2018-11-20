@@ -1,9 +1,11 @@
 const wikiQueries = require("../db/queries.wikis.js");
-//const Authorizer = require("../policies/wiki");
+const Authorizer = require("../policies/wiki");
 
 module.exports = {
   index(req, res, next){
-    if(req.user){
+    const authorized = new Authorizer(req.user).show();
+    if(authorized) {
+    //if(req.user){
       wikiQueries.getAllWikis((err, wikis) => {
         if(err){
           req.flash("error", err);
@@ -18,9 +20,9 @@ module.exports = {
     }
   },
   new(req, res, next){
-    //const authorized = new Authorizer(req.user).new();
-    //if(authorized) {
-    if (req.user){
+    const authorized = new Authorizer(req.user).new();
+    if(authorized) {
+    //if (req.user){
       res.render("wikis/new");
     } else {
       req.flash("notice", "You are not authorized to do that.");
@@ -28,9 +30,9 @@ module.exports = {
     }
   },
   create(req, res, next){
-       //const authorized = new Authorizer(req.user).create();
-       //if(authorized) {
-       if(req.user){
+       const authorized = new Authorizer(req.user).create();
+       if(authorized) {
+       //if(req.user){
          let newWiki= {
            title: req.body.title,
            body: req.body.body,
@@ -49,7 +51,9 @@ module.exports = {
        }
   },
   show(req, res, next){
-    if(req.user){
+    const authorized = new Authorizer(req.user).show();
+    if(authorized) {
+    //if(req.user){
       wikiQueries.getWiki(req.params.id, (err, wiki) => {
         if (err || wiki == null){
           res.redirect(404, "/");
@@ -73,7 +77,9 @@ module.exports = {
     });
   },
   edit(req, res, next){
-    if(req.user){
+    const authorized = new Authorizer(req.user, req.body).edit();
+    if(authorized) {
+    //if(req.user){
       wikiQueries.getWiki(req.params.id, (err, wiki) => {
         if (err){
           res.redirect(`wikis/${req.params.id}`);
@@ -86,7 +92,7 @@ module.exports = {
     }
   },
   update(req, res, next){
-    console.log("update controller")
+    //console.log("update controller")
     wikiQueries.updateWiki(req, req.body, (err, wiki) => {
       if(err || wiki == null){
         res.redirect(404, `/wikis/${req.params.id}/edit`);

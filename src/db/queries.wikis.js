@@ -1,5 +1,5 @@
 const Wiki = require("./models").Wiki;
-//const Authorizer = require("../policies/wiki");
+const Authorizer = require("../policies/wiki");
 
 
 module.exports = {
@@ -33,9 +33,9 @@ module.exports = {
   deleteWiki(req, callback){
     return Wiki.findById(req.params.id)
     .then((wiki) => {
-      //const authorized = new Authorizer(req.user, post).destroy();
-      //if(authorized) {
-      if (req.user){
+      const authorized = new Authorizer(req.user, wiki).destroy();
+      if(authorized) {
+      //if (req.user){
         wiki.destroy()
         .then((res) => {
           callback(null, wiki);
@@ -57,9 +57,9 @@ module.exports = {
     if(!wiki){
       return callback("Wiki not found");
     }
-    //const authorized = new Authorizer(req.user, post).update();
-    //if(authorized) {
-    if(req.user){
+    const authorized = new Authorizer(req.user, wiki).update();
+    if(authorized) {
+    //if(req.user){
       wiki.update(updatedWiki, {
         fields: Object.keys(updatedWiki)
       })
