@@ -21,7 +21,13 @@
             <li class="nav-item">
               <a class="nav-link" href="/users/payment">Upgrade to Premium</a>
             </li>
-            <% } %>
+            <% } else if(currentUser.role == 1) { %>
+              <li class="nav-item">
+                <form action="/users/downgrade" method="POST">
+                  <button type="submit" class="btn btn-primary">Downgrade to Standard</button>
+                </form>
+              </li>
+              <% } %>
           <% } else { %>
             <li class="nav-item">
               <a class="nav-link" href="/users/sign_up">Sign up</a>

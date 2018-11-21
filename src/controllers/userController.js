@@ -85,6 +85,25 @@ module.exports = {
         }
       })
     })
+  },
+  downgrade(req, res, next){
+    const updatedUser = {
+      username: req.user.username,
+      email: req.user.email,
+      password: req.user.password,
+      role: 0
+    };
+    userQueries.updateUser(req, updatedUser, (err, user) => {
+      if(err){
+        req.flash("error", err);
+        res.redirect("/");
+      } else {
+        req.flash("notice", "You've successfully downgraded your account back to standard!");
+        res.redirect("/");
+      }
+    })
+
+
   }
 
 

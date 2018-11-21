@@ -225,6 +225,16 @@ it("should not sign in a user not in the database", (done) => {
 
 
 
+/*
+  describe("POST /users/downgrade", () => {
+    it("should downgrade role from premium(1) to standard(0) and direct back to /", (done) => {
+      request.post(`${base}downgrade`, (err, res, body) => {
+        expect(body).toContain("Welcome to Blocipedia");
+        done();
+      })
+    })
+  })
+*/
 
 
 
