@@ -18,7 +18,7 @@ module.exports = {
     }
   },
   validateWikis(req, res, next) {
-    console.log(req.body.title)
+    //console.log(req.body.title)
     if(req.method === "POST") {
       req.checkBody("title", "must be at least 2 characters in length").isLength({min: 2})
       req.checkBody("body", "must be at least 6 characters in length").isLength({min: 6})

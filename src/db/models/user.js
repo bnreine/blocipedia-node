@@ -39,6 +39,22 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       as: "wikis"
     });
+    User.addScope("getAllOwnedPrivateWikis", (id) => {
+      return {
+        include: [{
+          model: models.Wiki,
+          as: "wikis",
+          where: {
+            private: true
+          }
+        }],
+        where: {
+          id: id
+        },
+        order: [["createdAt", "DESC"]]
+      }
+    });
+
   };
   return User;
 };

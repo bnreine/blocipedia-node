@@ -1,12 +1,23 @@
 const Wiki = require("./models").Wiki;
 const Authorizer = require("../policies/wiki");
+const User = require("./models").User;
 
 
 module.exports = {
-  getAllWikis(callback){
-    return Wiki.all()
-    .then((wikis) => {
-      callback(null, wikis);
+  getAllWikis(id, callback){
+
+    Wiki.scope({method: ["getPublicWikis"]}).all()
+    .then((publicWikis) => {
+      let wikis = {};
+      wikis["publicWikis"] = publicWikis;
+      User.scope({method: ["getAllOwnedPrivateWikis", id]}).all()
+      .then((user) => {
+        wikis["privateWikis"] = user[0] ? user[0].wikis : null;
+        callback(null, wikis);
+      })
+      .catch((err) => {
+        callback(err);
+      })
     })
     .catch((err) => {
       callback(err);
@@ -35,7 +46,6 @@ module.exports = {
     .then((wiki) => {
       const authorized = new Authorizer(req.user, wiki).destroy();
       if(authorized) {
-      //if (req.user){
         wiki.destroy()
         .then((res) => {
           callback(null, wiki);
@@ -59,7 +69,6 @@ module.exports = {
     }
     const authorized = new Authorizer(req.user, wiki).update();
     if(authorized) {
-    //if(req.user){
       wiki.update(updatedWiki, {
         fields: Object.keys(updatedWiki)
       })

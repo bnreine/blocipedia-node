@@ -1,15 +1,15 @@
 const wikiQueries = require("../db/queries.wikis.js");
 const Authorizer = require("../policies/wiki");
+const Wiki = require("../db/models").Wiki;
 
 module.exports = {
   index(req, res, next){
     const authorized = new Authorizer(req.user).show();
     if(authorized) {
-    //if(req.user){
-      wikiQueries.getAllWikis((err, wikis) => {
+      wikiQueries.getAllWikis(req.user.id, (err, wikis) => {
         if(err){
           req.flash("error", err);
-          res.redirect(500, "/");
+          res.redirect("/");
         } else {
           res.render("wikis/index", {wikis});
         }
@@ -22,7 +22,6 @@ module.exports = {
   new(req, res, next){
     const authorized = new Authorizer(req.user).new();
     if(authorized) {
-    //if (req.user){
       res.render("wikis/new");
     } else {
       req.flash("notice", "You are not authorized to do that.");
@@ -32,11 +31,11 @@ module.exports = {
   create(req, res, next){
        const authorized = new Authorizer(req.user).create();
        if(authorized) {
-       //if(req.user){
          let newWiki= {
            title: req.body.title,
            body: req.body.body,
-           userId: req.user.id
+           userId: req.user.id,
+           private: req.body.private || false
          };
          wikiQueries.addWiki(newWiki, (err, wiki) => {
            if(err){
@@ -53,7 +52,6 @@ module.exports = {
   show(req, res, next){
     const authorized = new Authorizer(req.user).show();
     if(authorized) {
-    //if(req.user){
       wikiQueries.getWiki(req.params.id, (err, wiki) => {
         if (err || wiki == null){
           res.redirect(404, "/");
@@ -79,7 +77,6 @@ module.exports = {
   edit(req, res, next){
     const authorized = new Authorizer(req.user, req.body).edit();
     if(authorized) {
-    //if(req.user){
       wikiQueries.getWiki(req.params.id, (err, wiki) => {
         if (err){
           res.redirect(`wikis/${req.params.id}`);
@@ -92,10 +89,14 @@ module.exports = {
     }
   },
   update(req, res, next){
-    //console.log("update controller")
-    wikiQueries.updateWiki(req, req.body, (err, wiki) => {
+    let updatedWiki= {
+      title: req.body.title,
+      body: req.body.body,
+      private: req.body.private || false
+    };
+    wikiQueries.updateWiki(req, updatedWiki, (err, wiki) => {
       if(err || wiki == null){
-        res.redirect(404, `/wikis/${req.params.id}/edit`);
+        res.redirect(`/wikis`);
       } else {
         res.redirect(`/wikis/${req.params.id}`);
       }
