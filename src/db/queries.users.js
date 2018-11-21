@@ -20,5 +20,30 @@ module.exports = {
     .catch((err) => {
       callback(err);
     })
+  },
+  updateUser(req, updatedUser, callback){
+
+  return User.findById(req.user.id)
+  .then((user) => {
+    if(!user){
+      return callback("User not found");
+    }
+    //const authorized = new Authorizer(req.user, wiki).update();
+    //if(authorized) {
+    if(req.user){
+      user.update(updatedUser, {
+        fields: Object.keys(updatedUser)
+      })
+      .then(() => {
+        callback(null, user);
+      })
+      .catch((err) => {
+        callback(err);
+      });
+    } else {
+      req.flash("notice", "You are not authorized to do that.");
+      callback("Forbidden");
+    }
+  });
   }
 }

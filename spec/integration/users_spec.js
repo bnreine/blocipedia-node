@@ -191,15 +191,37 @@ it("should not sign in a user not in the database", (done) => {
   });
 });
 
-
-
-
-
   });
 
 
+  describe("GET /users/payment", () => {
+    it("should render a payment page to upgrade to premium membership and send ", (done) => {
+      request.get(`${base}payment`, (err, res, body) => {
+        expect(body).toContain("Please provide payment details to upgrade to premium");
+        done();
+      })
+    })
+
+  })
 
 
+
+/*
+  describe("POST /users/payment", () => {
+    it("server should receive payment token, send payment to stripe api and then upgrade member to premium status", (done) => {
+
+
+
+      request.post(`${base}payment`, (err, res, body) => {
+
+
+      })
+
+
+    })
+
+  })
+*/
 
 
 
