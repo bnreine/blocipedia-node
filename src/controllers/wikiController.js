@@ -7,7 +7,7 @@ module.exports = {
   index(req, res, next){
     const authorized = new Authorizer(req.user).show();
     if(authorized) {
-      wikiQueries.getAllWikis(req.user.id, (err, wikis) => {
+      wikiQueries.getAllWikis(req.user, (err, wikis) => {
         if(err){
           req.flash("error", err);
           res.redirect("/");
@@ -90,19 +90,19 @@ module.exports = {
     }
   },
   update(req, res, next){
-    let updatedWiki= {
-      title: req.body.title,
-      body: req.body.body,
-      private: req.body.private || false
-    };
-    wikiQueries.updateWiki(req, updatedWiki, (err, wiki) => {
-      if(err || wiki == null){
-        res.redirect(`/wikis`);
-      } else {
-        res.redirect(`/wikis/${req.params.id}`);
-      }
-    });
+    wikiQueries.getWiki(req.params.id, (err, previousWiki) => {
+      let updatedWiki= {
+        title: req.body.title,
+        body: req.body.body,
+        private: req.body.private || previousWiki.private
+      };
+      wikiQueries.updateWiki(req, updatedWiki, (err, wiki) => {
+        if(err || wiki == null){
+          res.redirect(`/wikis`);
+        } else {
+          res.redirect(`/wikis/${req.params.id}`);
+        }
+      });
+    })
   }
-
-
 }

@@ -4,20 +4,33 @@ const User = require("./models").User;
 
 
 module.exports = {
-  getAllWikis(id, callback){
+  getAllWikis(user, callback){
 
     Wiki.scope({method: ["getPublicWikis"]}).all()
     .then((publicWikis) => {
       let wikis = {};
       wikis["publicWikis"] = publicWikis;
-      User.scope({method: ["getAllOwnedPrivateWikis", id]}).all()
-      .then((user) => {
-        wikis["privateWikis"] = user[0] ? user[0].wikis : null;
-        callback(null, wikis);
-      })
-      .catch((err) => {
-        callback(err);
-      })
+      const adminAuthorized = new Authorizer(user)._isAdmin();
+      if (adminAuthorized){
+        //console.log(adminAuthorized)
+        Wiki.scope({method: ["getAllPrivateWikis"]}).all()
+        .then((allPrivateWikis) => {
+          wikis["privateWikis"] = allPrivateWikis;
+          callback(null, wikis);
+        })
+        .catch((err) => {
+          callback(err);
+        })
+      } else {
+        User.scope({method: ["getAllOwnedPrivateWikis", user.id]}).all()
+        .then((users) => {
+          wikis["privateWikis"] = users[0] ? users[0].wikis : null;
+          callback(null, wikis);
+        })
+        .catch((err) => {
+          callback(err);
+        })
+      }
     })
     .catch((err) => {
       callback(err);
