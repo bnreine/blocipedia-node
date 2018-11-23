@@ -23,9 +23,7 @@
             </li>
             <% } else if(currentUser.role == 1) { %>
               <li class="nav-item">
-                <form action="/users/downgrade" method="POST">
-                  <button type="submit" class="btn btn-primary">Downgrade to Standard</button>
-                </form>
+                <a class="nav-link" href="/users/downgrade_confirm">Downgrade to standard</a>
               </li>
               <% } %>
           <% } else { %>

@@ -11,5 +11,6 @@ router.get("/users/sign_out", userController.signOut);
 router.get("/users/payment", userController.paymentForm);
 router.post("/users/payment", userController.processPayment);
 router.post("/users/downgrade", userController.downgrade);
+router.get("/users/downgrade_confirm", userController.downgradeConfirmForm);
 
 module.exports = router;

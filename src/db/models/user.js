@@ -1,5 +1,6 @@
 require('dotenv').config();
 const sgMail = require('@sendgrid/mail');
+const Wiki = require("../models").Wiki;
 
 'use strict';
 module.exports = (sequelize, DataTypes) => {
@@ -35,11 +36,39 @@ module.exports = (sequelize, DataTypes) => {
       };
       sgMail.send(msg);
     });
+    User.afterUpdate((user, callback) => {
+
+      if(user.role === 0){
+        User.scope({method: ["getAllOwnedPrivateWikis", user.id]}).all()
+        .then((users) => {
+          users[0].wikis.forEach((privateWiki) => {
+            let updatedWiki = {
+              title: privateWiki.title,
+              body: privateWiki.body,
+              private: false,
+              userId: user.id
+            }
+            privateWiki.update(updatedWiki, {
+              fields: Object.keys(updatedWiki)
+            })
+            .then(() => {
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      }
+    });
     User.hasMany(models.Wiki, {
       foreignKey: "userId",
       as: "wikis"
     });
     User.addScope("getAllOwnedPrivateWikis", (id) => {
+      console.log("private wiki scope")
       return {
         include: [{
           model: models.Wiki,

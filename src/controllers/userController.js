@@ -104,6 +104,12 @@ module.exports = {
     })
 
 
+  },
+  downgradeConfirmForm(req, res, next){
+    console.log("before render in controller")
+    res.render("users/downgrade_confirm");
+    //res.render("users/sign_up");
+    console.log("after render in controller")
   }
 
 
