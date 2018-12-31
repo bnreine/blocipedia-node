@@ -1,4 +1,3 @@
 # blocipedia-node
 
-
-https://bnreine-blocipedia-node.herokuapp.com/
+This is a wikipedia clone.  In order to test out the site, please login as "member10@gmail.com" with password "tenten".  From here, you can create, edit, delete, and read wikis.  As a normal member, you can create public wikis.  If you choose to pay for a premium membership, then you can create private wikis.  In order to test out the upgrade membership feature with payment through stripe, enter "test@gmail.com" for the email, 4242 4242 4242 4242 for the credit card number, 04/24 for the expiration date and 187 for the CVC number.  If this member is already upgraded in the system, then you can downgrade and then test the upgrade from there.  Upon downgrading, all your private wikis become public.  Here is the deployed site: https://bnreine-blocipedia-node.herokuapp.com/

@@ -4,6 +4,8 @@ const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 const server = http.createServer(app);
 
+//console.log(port)
+
 server.listen(port);
 
 function normalizePort(val) {

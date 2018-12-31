@@ -255,7 +255,7 @@ describe("member attempting to perform CRUD actions for Wiki", () => {
 
 
 
-
+/*
     describe("GET /wikis/new", () => {
 
       it("should render a new wiki form", (done) => {
@@ -267,7 +267,7 @@ describe("member attempting to perform CRUD actions for Wiki", () => {
       });
 
     });
-
+*/
 
 
 
@@ -334,7 +334,7 @@ describe("member attempting to perform CRUD actions for Wiki", () => {
   });
 
 
-
+/*
   describe("GET /wikis/:id/edit", () => {
 
     it("should render an edit page for the associated id", (done) => {
@@ -347,7 +347,7 @@ describe("member attempting to perform CRUD actions for Wiki", () => {
     })
 
   })
-
+*/
 
 
 
