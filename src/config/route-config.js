@@ -9,6 +9,6 @@ module.exports = {
     }
     app.use(staticRoutes);
     app.use(wikiRoutes);
-     app.use(userRoutes);
+    app.use(userRoutes);
   }
 }

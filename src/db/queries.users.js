@@ -3,12 +3,9 @@ const bcrypt = require("bcryptjs");
 
 module.exports = {
   createUser(newUser, callback){
-
-// #3
     const salt = bcrypt.genSaltSync();
     const hashedPassword = bcrypt.hashSync(newUser.password, salt);
 
-// #4
     return User.create({
       username: newUser.username,
       email: newUser.email,
@@ -28,8 +25,6 @@ module.exports = {
     if(!user){
       return callback("User not found");
     }
-    //const authorized = new Authorizer(req.user, wiki).update();
-    //if(authorized) {
     if(req.user){
       user.update(updatedUser, {
         fields: Object.keys(updatedUser)

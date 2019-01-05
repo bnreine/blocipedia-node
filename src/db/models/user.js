@@ -26,37 +26,29 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   User.associate = function(models) {
-    User.afterCreate((user, callback) => {
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-      const msg = {
-        to: user.email,
-        from: 'bnreinecke0209@gmail.com',
-        subject: 'Confirmed Account Creation',
-        text: 'Your account is confirmed!'
-      };
-      sgMail.send(msg);
-    });
     User.afterUpdate((user, callback) => {
-
       if(user.role === 0){
         User.scope({method: ["getAllOwnedPrivateWikis", user.id]}).all()
         .then((users) => {
-          users[0].wikis.forEach((privateWiki) => {
-            let updatedWiki = {
-              title: privateWiki.title,
-              body: privateWiki.body,
-              private: false,
-              userId: user.id
-            }
-            privateWiki.update(updatedWiki, {
-              fields: Object.keys(updatedWiki)
+          if (users[0] && users[0].wikis){
+            users[0].wikis.forEach((privateWiki) => {
+              let updatedWiki = {
+                title: privateWiki.title,
+                body: privateWiki.body,
+                private: false,
+                userId: user.id
+              }
+              privateWiki.update(updatedWiki, {
+                fields: Object.keys(updatedWiki)
+              })
+              .then(() => {
+              })
+              .catch((err) => {
+                console.log(err);
+              });
             })
-            .then(() => {
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-          })
+          }
+
         })
         .catch((err) => {
           console.log(err)
@@ -68,7 +60,6 @@ module.exports = (sequelize, DataTypes) => {
       as: "wikis"
     });
     User.addScope("getAllOwnedPrivateWikis", (id) => {
-      console.log("private wiki scope")
       return {
         include: [{
           model: models.Wiki,
