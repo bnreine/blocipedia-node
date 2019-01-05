@@ -9,9 +9,7 @@ const bcrypt = require("bcryptjs");
 
 describe("routes: users", () => {
 
-
   beforeEach((done) => {
-
     sequelize.sync({force: true})
     .then(() => {
       done();
@@ -20,7 +18,6 @@ describe("routes: users", () => {
       console.log(err);
       done();
     });
-
   });
 
 
@@ -33,10 +30,9 @@ describe("routes: users", () => {
   describe("GET /users/sign_up", () => {
 
     it("should render a view with a sign up form", (done) => {
-      //console.log("get sign up form")
       request.get(`${base}sign_up`, (err, res, body) => {
         expect(err).toBeNull();
-        expect(body).toContain("Welcome to Blocipedia");
+        expect(body).toContain("Welcome to Wiki Pages");
         done();
       });
     });
@@ -44,17 +40,8 @@ describe("routes: users", () => {
   });
 
 
-
-
-
-
-
-
-
-
   describe("POST /users", () => {
 
-// #1
     it("should create a new user with valid values and redirect", (done) => {
 
       const options = {
@@ -69,8 +56,6 @@ describe("routes: users", () => {
 
       request.post(options,
         (err, res, body) => {
-
-// #2
           User.findOne({where: {email: "user1@example.com"}})
           .then((user) => {
             expect(user).not.toBeNull();
@@ -88,8 +73,6 @@ describe("routes: users", () => {
 
 
 
-
-// #3
     it("should not create a new user with invalid attributes and redirect", (done) => {
       request.post(
         {
@@ -194,6 +177,9 @@ it("should not sign in a user not in the database", (done) => {
   });
 
 
+
+
+
   describe("GET /users/payment", () => {
     it("should render a payment page to upgrade to premium membership and send ", (done) => {
       request.get(`${base}payment`, (err, res, body) => {
@@ -206,35 +192,7 @@ it("should not sign in a user not in the database", (done) => {
 
 
 
-/*
-  describe("POST /users/payment", () => {
-    it("server should receive payment token, send payment to stripe api and then upgrade member to premium status", (done) => {
 
-
-
-      request.post(`${base}payment`, (err, res, body) => {
-
-
-      })
-
-
-    })
-
-  })
-*/
-
-
-
-/*
-  describe("POST /users/downgrade", () => {
-    it("should downgrade role from premium(1) to standard(0) and direct back to /", (done) => {
-      request.post(`${base}downgrade`, (err, res, body) => {
-        expect(body).toContain("Welcome to Blocipedia");
-        done();
-      })
-    })
-  })
-*/
 
 
 

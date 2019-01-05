@@ -4,7 +4,6 @@ require("dotenv").config();
 
 module.exports = {
   signUp(req, res, next){
-    //console.log("before render sign up")
     res.render("users/sign_up");
   },
   create(req, res, next){
@@ -31,10 +30,8 @@ module.exports = {
   },
 
   signIn(req, res, next){
-    //console.log("begin controller")
     passport.authenticate("local")(req, res, function () {
       if(!req.user){
-        console.log("error notice controller") //Doesn't spit anything out here with wrong password
         req.flash("notice", "Sign in failed. Please try again.")
         res.redirect("/users/sign_in");
       } else {
@@ -54,15 +51,8 @@ module.exports = {
     res.render("users/payment", {publishableKey: process.env.PUB_KEY})
   },
   processPayment(req, res, next){
-    //console.log(req)
-    // Set your secret key: remember to change this to your live secret key in production
-    // See your keys here: https://dashboard.stripe.com/account/apikeys
     var stripe = require("stripe")(process.env.SECRET_KEY);
-
-    // Token is created using Checkout or Elements!
-    // Get the payment token ID submitted by the form:
-    const token = req.body.stripeToken; // Using Express
-
+    const token = req.body.stripeToken;
     stripe.charges.create({
       amount: 1500,
       currency: 'usd',
@@ -106,10 +96,7 @@ module.exports = {
 
   },
   downgradeConfirmForm(req, res, next){
-    console.log("before render in controller")
     res.render("users/downgrade_confirm");
-    //res.render("users/sign_up");
-    console.log("after render in controller")
   }
 
 

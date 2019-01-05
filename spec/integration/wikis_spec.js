@@ -50,7 +50,6 @@ describe("routes : wikis", () => {
 //**********************start Guest context*********************************************
 describe("guest attempting to perform CRUD actions for Wiki", () => {
 
-// #2
      beforeEach((done) => {    // before each suite in this context
        request.get({           // mock authentication
          url: "http://localhost:3000/auth/fake",
@@ -71,7 +70,7 @@ describe("guest attempting to perform CRUD actions for Wiki", () => {
       it("should not allow guests to see this page and redirect to /", (done) => {
         request.get(`${base}`, (err, res, body) => {
           expect(err).toBeNull();
-          expect(body).toContain("Welcome to Blocipedia");
+          expect(body).toContain("Welcome to Wiki Pages");
           done();
         })
 
@@ -85,7 +84,7 @@ describe("guest attempting to perform CRUD actions for Wiki", () => {
       it("should not render a new wiki form and redirect to /", (done) => {
         request.get(`${base}new`, (err, res, body) => {
           expect(err).toBeNull();
-          expect(body).toContain("Welcome to Blocipedia");
+          expect(body).toContain("Welcome to Wiki Pages");
           done();
         });
       });
@@ -106,7 +105,6 @@ describe("guest attempting to perform CRUD actions for Wiki", () => {
         };
         request.post(options,
           (err, res, body) => {
-            //expect(err).toBeNull();
             Wiki.findOne({where: {title: "Second wiki title"}})
             .then((wiki) => {
               expect(wiki).toBeNull();
@@ -129,7 +127,7 @@ describe("guest attempting to perform CRUD actions for Wiki", () => {
     it("should not render a view with the selected wiki", (done) => {
       request.get(`${base}${this.wiki.id}`, (err, res, body) => {
         expect(err).toBeNull();
-        expect(body).toContain("Welcome to Blocipedia");
+        expect(body).toContain("Welcome to Wiki Pages");
         done();
       });
     });
@@ -164,7 +162,7 @@ describe("guest attempting to perform CRUD actions for Wiki", () => {
       request.get(`${base}${this.wiki.id}/edit`, (err, res, body) => {
         expect(err).toBeNull();
         expect(body).not.toContain("Edit Wiki");
-        expect(body).toContain("Welcome to Blocipedia");
+        expect(body).toContain("Welcome to Wiki Pages");
         done();
       })
     })
@@ -202,12 +200,6 @@ describe("guest attempting to perform CRUD actions for Wiki", () => {
 
 
 
-
-
-
-
-
-
 })
 
 //**********************end Guest context*********************************************
@@ -224,7 +216,6 @@ describe("guest attempting to perform CRUD actions for Wiki", () => {
 //**********************start member logged in context*********************************************
 describe("member attempting to perform CRUD actions for Wiki", () => {
 
-// #2
      beforeEach((done) => {    // before each suite in this context
        request.get({           // mock authentication
          url: "http://localhost:3000/auth/fake",
@@ -254,20 +245,6 @@ describe("member attempting to perform CRUD actions for Wiki", () => {
     })
 
 
-
-/*
-    describe("GET /wikis/new", () => {
-
-      it("should render a new wiki form", (done) => {
-        request.get(`${base}new`, (err, res, body) => {
-          expect(err).toBeNull();
-          expect(body).toContain("New Wiki");
-          done();
-        });
-      });
-
-    });
-*/
 
 
 
@@ -333,21 +310,6 @@ describe("member attempting to perform CRUD actions for Wiki", () => {
 
   });
 
-
-/*
-  describe("GET /wikis/:id/edit", () => {
-
-    it("should render an edit page for the associated id", (done) => {
-      request.get(`${base}${this.wiki.id}/edit`, (err, res, body) => {
-        expect(err).toBeNull();
-        expect(body).toContain("Edit Wiki");
-        expect(body).not.toContain("Welcome to Blocipedia");
-        done();
-      })
-    })
-
-  })
-*/
 
 
 

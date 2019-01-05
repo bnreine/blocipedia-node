@@ -12,16 +12,14 @@
       <main class="container">
       <% include ../static/partials/messages.ejs %>
         <h1>Downgrading will make all private wikis public.  Proceed?</h1>
-        <!-- <a class="nav-link" href="/users/downgrade">Yes</a> -->
         <form method="POST" action="/users/downgrade">
           <input type="submit" value="Yes" class="btn btn-primary"/>
         </form>
         <form method="GET" action="/">
           <input type="submit" value="No" class="btn btn-primary"/>
         </form>
-        <!-- <a class="nav-link" href="/">No</a> -->
       </main>
-      <!-- /.container -->
+    
     <% include ../static/partials/baseScripts.ejs %>
 
     </body>
